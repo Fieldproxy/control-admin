@@ -6,7 +6,7 @@ import Logo from "../../../assets/images/logo.png";
 function CompanyTitle() {
   return (
     <div className="companyTitle">
-      <img src={Logo} />
+      <img src={Logo} alt="logo" />
       {/* <IconButton size="small" aria-label="delete">
         <CloseIcon />
       </IconButton> */}
