@@ -10,7 +10,10 @@ import LoginImage from "../../assets/images/login.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { RootStoreI } from "../../redux/reducers";
 import { useHistory, useLocation } from "react-router-dom";
-import {  validateError , signInToPortal} from "../../redux/actions/authenticate";
+import {
+  validateError,
+  signInToPortal,
+} from "../../redux/actions/authenticate";
 import TextField from "@material-ui/core/TextField";
 import MuiAlert from "@material-ui/lab/Alert";
 
@@ -23,7 +26,7 @@ const useStyles = makeStyles({
   },
 });
 
-type locationI = { 
+type locationI = {
   state: {
     from: {
       pathname: string;
@@ -48,7 +51,7 @@ function Login() {
     if (username === "" || password === "") {
       return setError("Fields are required");
     }
-    dispatch(signInToPortal({username, password}));
+    dispatch(signInToPortal({ username, password }));
   };
 
   const { isLoggedIn, loadingLogIn, error } = useSelector(
