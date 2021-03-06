@@ -12,10 +12,7 @@ import { RootStoreI } from "./redux/reducers";
 import PrivateRoute from "./components/privateRoute";
 
 function Routes() {
-  const isLoggedIn = useSelector(
-    (state: RootStoreI) => state.auth.isLoggedIn
-  );
-
+  const isLoggedIn = useSelector((state: RootStoreI) => state.auth.isLoggedIn);
 
   const protectedProps = {
     isAuthenticated: isLoggedIn,
@@ -51,7 +48,7 @@ function Routes() {
                     component={Page2}
                     {...protectedProps}
                   />
-                  <PrivateRoute  component={NotFound} {...protectedProps} />
+                  <PrivateRoute component={NotFound} {...protectedProps} />
                 </Switch>
               </Layout>
             )}

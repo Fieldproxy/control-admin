@@ -12,7 +12,8 @@ import { RootStoreI } from "../../redux/reducers";
 import { useHistory, useLocation } from "react-router-dom";
 import {
   validateError,
-  signInToPortal,
+  SignInToPortal,
+  logInExistUser,
 } from "../../redux/actions/authenticate";
 import TextField from "@material-ui/core/TextField";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -51,7 +52,7 @@ function Login() {
     if (username === "" || password === "") {
       return setError("Fields are required");
     }
-    dispatch(signInToPortal({ username, password }));
+    dispatch(SignInToPortal({ username, password }));
   };
 
   const { isLoggedIn, loadingLogIn, error } = useSelector(
@@ -60,11 +61,18 @@ function Login() {
 
   const takeToTheDashboard = () => {
     let from = { pathname: "/dashboard" };
-    if (location.state.from.pathname !== "/") {
+    if (location.state && location.state.from.pathname !== "/") {
       from = location.state.from;
     }
     history.replace(from);
   };
+
+  useEffect(() => {
+    const alreadyLogged = localStorage.getItem("controlAdminIn");
+    if (alreadyLogged && alreadyLogged === "logged In") {
+      dispatch(logInExistUser());
+    }
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -120,6 +128,7 @@ function Login() {
 
               {error && error.message && (
                 <MuiAlert
+                  style={{ marginTop: 8 }}
                   elevation={6}
                   variant="filled"
                   severity="error"

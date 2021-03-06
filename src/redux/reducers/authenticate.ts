@@ -2,13 +2,12 @@ import {
   LOG_IN_SUCCESS,
   LOG_IN_LOADING,
   LOG_IN_FAIL,
+  LOG_IN_EXISTING,
   LOG_OUT,
   ErrorI,
   UserI,
   AuthenticateDispatchTypes,
 } from "../actions/authenticate/authenticateTypes";
-
-
 export interface ActionI {
   type: String;
   payload: ErrorI | UserI;
@@ -39,8 +38,8 @@ const authenticateReducer = (
     case LOG_IN_SUCCESS:
       return {
         ...state,
-        isLoggedIn: true,
         loadingLogIn: false,
+        isLoggedIn: true,
         user: action.payload,
         error: { message: "" },
       };
@@ -48,6 +47,8 @@ const authenticateReducer = (
       return { ...state, loadingLogIn: false, error: action.payload };
     case LOG_OUT:
       return initialState;
+    case LOG_IN_EXISTING:
+      return { ...state, isLoggedIn: true };
     default:
       return state;
   }

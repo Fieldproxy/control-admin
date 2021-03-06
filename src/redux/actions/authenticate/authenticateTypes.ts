@@ -3,6 +3,7 @@ export const LOG_IN_FAIL = "LOG_IN_FAIL";
 export const LOG_IN_SUCCESS = "LOG_IN_SUCCESS";
 export const LOG_IN_LOADING = "LOG_IN_LOADING";
 export const LOG_OUT = "LOG_OUT";
+export const LOG_IN_EXISTING = "LOG_IN_EXISTING";
 
 export type ErrorI = {
   message: string;
@@ -30,8 +31,13 @@ export interface LogOut {
   type: typeof LOG_OUT;
 }
 
+export interface LOG_IN_EXISTING {
+  type: typeof LOG_IN_EXISTING;
+}
+
 export type AuthenticateDispatchTypes =
   | LogInSuccess
   | LogInFail
   | LogInLoading
-  | LogOut;
+  | LogOut
+  | LOG_IN_EXISTING;
