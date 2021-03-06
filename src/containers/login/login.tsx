@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-type locationI = {
+type locationI = { 
   state: {
     from: {
       pathname: string;
