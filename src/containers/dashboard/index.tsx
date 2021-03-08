@@ -1,7 +1,3 @@
-import React from 'react';
+import Dashboard from "./dasboard";
 
-function Home() {
-    return <div > Home Page </div>
-}
-
-export default Home;
+export default Dashboard;

@@ -25,7 +25,7 @@ export const SignInToPortal = (credentials: LogInCredI) => async (
       const { data } = res;
       if (data.status && data.status === "You are admin") {
         localStorage.setItem("controlAdminIn", "logged In");
-        dispatch({
+        return dispatch({
           type: LOG_IN_SUCCESS,
           payload: { name: "Admin" },
         });
@@ -36,7 +36,7 @@ export const SignInToPortal = (credentials: LogInCredI) => async (
       throw new Error("Api Failed");
     }
   } catch (err) {
-    dispatch({
+    return dispatch({
       type: LOG_IN_FAIL,
       payload: { message: err.message },
     });
@@ -69,7 +69,7 @@ export const logOut = () => async (
 export const logInExistUser = () => (
   dispatch: Dispatch<AuthenticateDispatchTypes>
 ) => {
-  dispatch({
+  return dispatch({
     type: LOG_IN_EXISTING,
   });
 };

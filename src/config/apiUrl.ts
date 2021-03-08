@@ -1,8 +1,11 @@
-export const host = "https://port3002.fieldproxy.com/v2/adminpanel";
+export const base = "https://port3002.fieldproxy.com";
+export const host = `${base}/v2/adminpanel`;
 
 export const ApiUrl = {
   // auth
   signIn: `${host}/signin`,
   signOut: `${host}/signout`,
-  companyData: `${host}/compData`,
+  companyData: `${base}/compData`,
+  getOrganizations:`${host}/getOrganizations`,
+  deviceDetails: `${host}/deviceDetails`
 };

@@ -4,13 +4,20 @@ import {
   LOG_IN_FAIL,
   LOG_IN_EXISTING,
   LOG_OUT,
-  ErrorI,
   UserI,
   AuthenticateDispatchTypes,
 } from "../actions/authenticate/authenticateTypes";
+
+import { ErrorI } from '../actions/common'
 export interface ActionI {
   type: String;
   payload: ErrorI | UserI;
+}
+export interface AuthenticateI {
+  loadingLogIn: boolean;
+  isLoggedIn: boolean;
+  user: UserI;
+  error?: ErrorI;
 }
 
 const initialState: AuthenticateI = {
@@ -19,13 +26,6 @@ const initialState: AuthenticateI = {
   user: { name: "" },
   error: { message: "" },
 };
-
-export interface AuthenticateI {
-  loadingLogIn: boolean;
-  isLoggedIn: boolean;
-  user: UserI;
-  error?: ErrorI;
-}
 
 const authenticateReducer = (
   state: AuthenticateI = initialState,

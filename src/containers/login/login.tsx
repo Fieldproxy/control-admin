@@ -44,6 +44,20 @@ function Login() {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
+  const { isLoggedIn, loadingLogIn, error } = useSelector(
+    (state: RootStoreI) => state.auth
+  );
+
+  useEffect(() => {
+    logInIfExist();
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      takeToTheDashboard();
+    }
+  }, [isLoggedIn]);
+
   const setError = (message: string) => {
     dispatch(validateError(message));
   };
@@ -55,10 +69,6 @@ function Login() {
     dispatch(SignInToPortal({ username, password }));
   };
 
-  const { isLoggedIn, loadingLogIn, error } = useSelector(
-    (state: RootStoreI) => state.auth
-  );
-
   const takeToTheDashboard = () => {
     let from = { pathname: "/dashboard" };
     if (location.state && location.state.from.pathname !== "/") {
@@ -67,18 +77,12 @@ function Login() {
     history.replace(from);
   };
 
-  useEffect(() => {
+  const logInIfExist = () => {
     const alreadyLogged = localStorage.getItem("controlAdminIn");
     if (alreadyLogged && alreadyLogged === "logged In") {
       dispatch(logInExistUser());
     }
-  }, []);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      takeToTheDashboard();
-    }
-  }, [isLoggedIn]);
+  };
 
   return (
     <div className="login-container">

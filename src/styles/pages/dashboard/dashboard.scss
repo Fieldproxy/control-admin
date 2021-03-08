@@ -1,0 +1,23 @@
+
+@import "../../partials/variables";
+
+.dashboard-container {
+    height: 97%;
+    width: 98%;
+    padding: 1%;
+}
+
+.insight-card {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  
+    .content {
+        font-size: 34px;
+        height: inherit;
+        font-weight: 600    ;
+        color: $secondary-color;
+    }
+}
