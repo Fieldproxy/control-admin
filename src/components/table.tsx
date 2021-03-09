@@ -8,56 +8,35 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import { compDataI } from "../../../redux/actions/dashboard/dashboardTypes";
-
-interface companyColumn {
-  id: "companyId" | "companyName" | "agents" | "responses";
-  label: string;
-  minWidth?: number;
-  align?: "right";
-  format?: (value: number) => string;
-}
-
-const columns: companyColumn[] = [
-  {
-    id: "companyId",
-    label: "Company Id",
-    minWidth: 170,
-  },
-  {
-    id: "companyName",
-    label: "Company Name",
-    minWidth: 300,
-  },
-  {
-    id: "agents",
-    label: "Total Agents",
-    minWidth: 170,
-  },
-  {
-    id: "responses",
-    label: "Total Responses",
-    minWidth: 170,
-  },
-];
 
 const useStyles = makeStyles({
   root: {
     width: "100%",
   },
   container: {
-    maxHeight: 440,
+    maxHeight: 400,
   },
 });
 
-type propsI = {
-  rows: compDataI[] | [];
+export interface columnI {
+  id: string;
+  label: string;
+  minWidth?: number;
+  maxWidth?: number;
+  align?: "right";
+  format?: (value: number) => string;
+}
+
+type PropsI = {
+  columns: columnI[];
+  rows: any[];
+  maxHeight?: number;
 };
 
-function CompanyTable(props: propsI) {
+function CustomTable(props: PropsI) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -72,15 +51,21 @@ function CompanyTable(props: propsI) {
 
   return (
     <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
+      <TableContainer
+        className={classes.container}
+        style={{ maxHeight: props.maxHeight || 400 }}
+      >
         <Table stickyHeader size="small" aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {props.columns.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{
+                    minWidth: column.minWidth,
+                    maxWidth: column.maxWidth,
+                  }}
                 >
                   {column.label}
                 </TableCell>
@@ -91,15 +76,10 @@ function CompanyTable(props: propsI) {
             {props.rows
               ? props.rows
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
+                  .map((row, i) => {
                     return row ? (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.companyId}
-                      >
-                        {columns.map((column) => {
+                      <TableRow hover role="checkbox" tabIndex={-1} key={i}>
+                        {props.columns.map((column) => {
                           const value = row[column.id];
                           return (
                             <TableCell key={column.id} align={column.align}>
@@ -117,7 +97,7 @@ function CompanyTable(props: propsI) {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={[25, 50, 100]}
         component="div"
         count={props.rows.length}
         rowsPerPage={rowsPerPage}
@@ -129,4 +109,4 @@ function CompanyTable(props: propsI) {
   );
 }
 
-export default CompanyTable;
+export default CustomTable;

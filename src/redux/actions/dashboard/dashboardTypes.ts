@@ -24,12 +24,16 @@ export type compDataI = {
   pendingAmount: number;
   responses: number;
   start_at: string;
-  agents: number
+  agents: number;
 };
 
 export interface compDataSuccess {
   type: typeof COMP_DATA_SUCCESS;
-  payload: [compDataI];
+  payload: {
+    compData: [compDataI];
+    totalAgents: number;
+    totalOrganizations: number;
+  };
 }
 
 export type DashboardDispatchTypes =

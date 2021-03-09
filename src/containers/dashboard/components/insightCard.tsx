@@ -1,6 +1,5 @@
 import React from "react";
 import Loader from "../../../components/loader";
-import HeadTitle from "../../../components/HeadTitle";
 
 interface insightPropI {
   loading: Boolean;

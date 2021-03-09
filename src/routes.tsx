@@ -5,7 +5,8 @@ import { useSelector } from "react-redux";
 import Page1 from "./containers/page1";
 import Page2 from "./containers/page2";
 import NotFound from "./containers/notFound";
-import Home from "./containers/dashboard";
+import Dashboard from "./containers/dashboard";
+import AgentDetail from "./containers/agentDetail";
 import Layout from "./components/layout";
 import Login from "./containers/login";
 import { RootStoreI } from "./redux/reducers";
@@ -33,7 +34,13 @@ function Routes() {
                   <PrivateRoute
                     path="/dashboard"
                     exact
-                    component={Home}
+                    component={Dashboard}
+                    {...protectedProps}
+                  />
+                  <PrivateRoute
+                    path="/dashboard/:companyId"
+                    exact
+                    component={AgentDetail}
                     {...protectedProps}
                   />
                   <PrivateRoute

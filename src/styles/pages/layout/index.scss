@@ -1,5 +1,6 @@
 @import "./sidebar.scss";
 @import "./topbar.scss";
+@import "../../partials/variables";
 
 .layout-wrapper {
   display: flex;
@@ -10,6 +11,6 @@
 
 .layout-aside {
   width: calc(100% - 250px);
-  background-color: #fff;
+  background-color: $grey;
   height: 100vh;
 }

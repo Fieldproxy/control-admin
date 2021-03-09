@@ -17,13 +17,15 @@ export interface dashboardI {
   loadingCompData: Boolean;
   compData?: Array<compDataI>;
   error?: ErrorI;
-  totalAgents: number
+  totalAgents: number;
+  totalOrganizations: number;
 }
 
 const initialState: dashboardI = {
   loadingCompData: false,
   compData: [],
   totalAgents: 0,
+  totalOrganizations: 0,
   error: undefined,
 };
 
@@ -38,11 +40,13 @@ const dashboardReducer = (
       return {
         ...state,
         loadingCompData: false,
-        compData: action.payload,
+        compData: action.payload.compData,
+        totalAgents: action.payload.totalAgents,
+        totalOrganizations: action.payload.totalOrganizations,
         error: undefined,
       };
     case COMP_DATA_FAIL:
-      return { ...state, loadingCompData: false, error: action.payload };
+      return { ...initialState, loadingCompData: false, error: action.payload };
     default:
       return state;
   }

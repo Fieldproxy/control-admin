@@ -1,9 +1,8 @@
 
-// *{
-//     background-color: #FEF7FF;
-// }
+@import "../partials/variables";
+
 .content-container {
-    background-color: #FEF7FF;
+    // background-color: grey;
     border-radius: 5px;
     width: calc(100% - 20px);
     margin: 10px;
@@ -11,3 +10,12 @@
     overflow-y: auto;
 }
 
+.custom-link {
+    text-decoration: none;
+    color: $secondary-color;
+    font-weight: 500;
+
+    &:hover {
+        color: $emphasis;
+    }
+}

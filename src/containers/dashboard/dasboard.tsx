@@ -3,20 +3,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { GetDashboardData } from "../../redux/actions/dashboard";
 import { RootStoreI } from "../../redux/reducers";
 import Loader from "../../components/loader";
-import axios from "axios";
-import { ApiUrl } from "../../config/apiUrl";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import InsightCard from "./components/insightCard";
-import CompanyTable from "./components/companyTable";
 import HeadTitle from "../../components/HeadTitle";
+import { compDataI } from "../../redux/actions/dashboard/dashboardTypes";
+import { NavLink } from "react-router-dom";
+import CustomTable, { columnI } from "../../components/table";
+
+
+interface columnTypesI extends compDataI {
+  action: JSX.Element[] | JSX.Element;
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      display: "flex",
+      width: "100%",
+      height: "100%",
     },
     paper: {
       padding: theme.spacing(1),
@@ -26,71 +32,93 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type AgentItemI = {
-  agentId: String;
-  organizationId: String;
-  lastLogin: String;
-  totalResponses: Number;
-  deviceDetails: {};
-  currentVersion: Number;
-  currentBackendUrl: String;
-  totalKmsTravelled: Number;
-};
-
-type InsightsI = {
-  totalAgents: number;
-  totalOrganizations: number;
-};
-
-const initialInsights: InsightsI = {
-  totalAgents: 0,
-  totalOrganizations: 0,
-};
+const columns: columnI[] = [
+  {
+    id: "companyId",
+    label: "Company Id",
+    minWidth: 170,
+  },
+  {
+    id: "companyName",
+    label: "Company Name",
+    minWidth: 300,
+  },
+  {
+    id: "agents",
+    label: "Total Agents",
+    minWidth: 70,
+  },
+  {
+    id: "responses",
+    label: "Total Responses",
+    minWidth: 70,
+  },
+  {
+    id: "action",
+    label: "Actions",
+    minWidth: 70,
+  },
+];
 
 function Dashboard() {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const [insights, setInsights] = useState(initialInsights);
-  const { loadingCompData, compData, error } = useSelector(
-    (state: RootStoreI) => state.dashboard
-  );
+  const {
+    loadingCompData,
+    compData,
+    error,
+    totalAgents,
+    totalOrganizations,
+  } = useSelector((state: RootStoreI) => state.dashboard);
+
+  const [tableData, setTableData] = useState<columnTypesI[]>([]);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     getDashboardData();
-    getAgentData();
   }, []);
 
   useEffect(() => {
-    if (compData && compData.length) {
-      getInsights();
-    }
-    return () => {
-      setInsights(initialInsights);
-    };
-  }, [compData]);
-
-  const getInsights = () => {
-    let [totalAgents, totalOrganizations] = [0, 0];
     if (compData) {
-      totalOrganizations = compData.length;
-      compData.forEach((c) => {
-        if (c && c.agents) {
-          totalAgents += c.agents;
-        }
-      });
+      formatForTable(compData, searchText);
+    } else {
+      formatForTable([], searchText);
     }
-    setInsights({ totalAgents, totalOrganizations });
-  };
+  }, [compData, searchText]);
 
   const getDashboardData = () => {
     dispatch(GetDashboardData());
   };
 
-  const getAgentData = async() => {
-    const res = await axios.post(ApiUrl.deviceDetails, {});
-    console.log({res});
-  }
+  const formatForTable = (data: compDataI[], searchText?: string) => {
+    const formattedData: columnTypesI[] = [];
+    let originalData = [];
+    if (searchText) {
+      originalData = data.filter((d) => d && d.companyId.includes(searchText));
+    } else {
+      originalData = data;
+    }
 
+    originalData.forEach((d) => {
+      if (d) {
+        formattedData.push({
+          ...d,
+          action: (
+            <NavLink className="custom-link" to={`dashboard/${d.companyId}`}>
+              {" "}
+              View{" "}
+            </NavLink>
+          ),
+        });
+      }
+    });
+    setTableData(formattedData);
+  };
+
+  const handleSearch = (e: React.SyntheticEvent) => {
+    let target = e.target as HTMLInputElement;
+    setSearchText(target.value);
+  };
 
   return (
     <div className="dashboard-container">
@@ -101,32 +129,40 @@ function Dashboard() {
               <HeadTitle> Total Organization </HeadTitle>
               <InsightCard
                 loading={loadingCompData}
-                data={insights.totalOrganizations}
+                data={totalOrganizations}
               />
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6}>
             <Paper className={classes.paper}>
               <HeadTitle> Total Agents </HeadTitle>
-              <InsightCard
-                loading={loadingCompData}
-                data={insights.totalAgents}
-              />
+              <InsightCard loading={loadingCompData} data={totalAgents} />
             </Paper>
           </Grid>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <HeadTitle> Company Details </HeadTitle>
+            <Paper className={classes.paper} style={{ minHeight: "350px" }}>
+              <div className="head-container">
+                <HeadTitle> Company Details </HeadTitle>
+                <div>
+                  {" "}
+                  <input
+                    type="text"
+                    value={searchText}
+                    placeholder="Search CompanyId"
+                    name="searchText"
+                    onChange={(e) => handleSearch(e)}
+                  />{" "}
+                </div>
+              </div>
               {loadingCompData ? (
                 <Loader />
               ) : (
-                <CompanyTable rows={compData ? compData : []} />
+                <CustomTable
+                  columns={columns}
+                  rows={compData ? tableData : []}
+                  maxHeight={360}
+                />
               )}
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <HeadTitle> Agent Details </HeadTitle>
             </Paper>
           </Grid>
         </Grid>
