@@ -21,13 +21,9 @@ interface columnTypesI extends userDetailI {
   deviceDetails: JSX.Element[] | JSX.Element;
 }
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
 function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
+  const top = 50;
+  const left = 50;
 
   return {
     top: `${top}%`,
@@ -179,7 +175,11 @@ function AgentDetail(props: Props) {
                 />
               </div>
             </div>
-            <CustomTable rows={userData ? tableData : []} maxHeight={500} columns={columns} />
+            <CustomTable
+              rows={userData ? tableData : []}
+              maxHeight={500}
+              columns={columns}
+            />
           </Paper>
         </div>
       )}
@@ -196,7 +196,11 @@ function AgentDetail(props: Props) {
             Device Details of {selectedUser.userId} on{" "}
             {new Date(selectedUser.lastUpdated).toLocaleString()}{" "}
           </h4>
-           { selectedUser.deviceDetails ? <PrettyPrintJson data={selectedUser.deviceDetails} /> : ' No Device Details Found ' }
+          {selectedUser.deviceDetails ? (
+            <PrettyPrintJson data={selectedUser.deviceDetails} />
+          ) : (
+            " No Device Details Found "
+          )}
         </div>
       </Modal>
     </div>

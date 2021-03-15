@@ -16,10 +16,14 @@ export const getAgentDetails = (companyId: string) => async (
     dispatch({ type: AGENT_DETAIL_LOADING });
     const res = await axios.post(ApiUrl.deviceDetails, { companyId });
     if (res) {
-      dispatch({
-        type: AGENT_DETAIL_SUCCESS,
-        payload: { userDetail: res.data },
-      });
+      if (res.data && res.data.status) {
+        dispatch({
+          type: AGENT_DETAIL_SUCCESS,
+          payload: { userDetail: res.data.data },
+        });
+      } else {
+        throw new Error(res.data.message || "Data fetch failed");
+      }
     } else {
       throw new Error("Cannot get data");
     }
