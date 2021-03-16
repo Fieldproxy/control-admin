@@ -50,7 +50,7 @@ function Login() {
 
   useEffect(() => {
     logInIfExist();
-  }, []);
+  }, []); 
 
   useEffect(() => {
     if (isLoggedIn) {

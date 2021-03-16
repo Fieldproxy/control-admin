@@ -34,7 +34,7 @@ export const SignInToPortal = (credentials: LogInCredI) => async (
       }
     } else {
       throw new Error("Api Failed");
-    }
+    } 
   } catch (err) {
     return dispatch({
       type: LOG_IN_FAIL,

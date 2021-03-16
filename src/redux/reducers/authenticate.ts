@@ -8,7 +8,7 @@ import {
   AuthenticateDispatchTypes,
 } from "../actions/authenticate/authenticateTypes";
 
-import { ErrorI } from '../actions/common'
+import { ErrorI } from "../actions/common";
 export interface ActionI {
   type: String;
   payload: ErrorI | UserI;

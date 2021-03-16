@@ -12,7 +12,6 @@ import { compDataI } from "../../redux/actions/dashboard/dashboardTypes";
 import { NavLink } from "react-router-dom";
 import CustomTable, { columnI } from "../../components/table";
 
-
 interface columnTypesI extends compDataI {
   action: JSX.Element[] | JSX.Element;
 }
@@ -26,6 +25,13 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       padding: theme.spacing(1),
+      textAlign: "center",
+      color: theme.palette.text.secondary,
+    },
+    insightPaper: {
+      padding: theme.spacing(1),
+      margin: "0 auto",
+      // width: 200,
       textAlign: "center",
       color: theme.palette.text.secondary,
     },
@@ -125,7 +131,7 @@ function Dashboard() {
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
-            <Paper className={classes.paper}>
+            <Paper className={classes.insightPaper}>
               <HeadTitle> Total Organization </HeadTitle>
               <InsightCard
                 loading={loadingCompData}
@@ -134,7 +140,7 @@ function Dashboard() {
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Paper className={classes.paper}>
+            <Paper className={classes.insightPaper}>
               <HeadTitle> Total Agents </HeadTitle>
               <InsightCard loading={loadingCompData} data={totalAgents} />
             </Paper>
@@ -155,7 +161,9 @@ function Dashboard() {
                 </div>
               </div>
               {loadingCompData ? (
-                <Loader />
+                <div style={{ height: 300 }}>
+                  <Loader />
+                </div>
               ) : (
                 <CustomTable
                   columns={columns}

@@ -10,6 +10,7 @@ import HeadTitle from "../../components/HeadTitle";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Modal from "@material-ui/core/Modal";
+import NoData from '../../components/noData';
 
 interface MatchParams {
   companyId: string;

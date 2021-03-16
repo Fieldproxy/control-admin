@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect, Route, RouteProps } from "react-router";
 
 export interface PrivateRouteProps extends RouteProps {
@@ -9,17 +9,28 @@ export interface PrivateRouteProps extends RouteProps {
 }
 
 export const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
-  let redirectPath = "";
-  if (!props.isAuthenticated) {
-    redirectPath = props.authenticationPath;
-  }
-  if (props.isAuthenticated && !props.isAllowed) {
-    redirectPath = props.restrictedPath;
-  } 
+  const [redirectPath, setRedirectPath] = useState("/login");
 
-  if (redirectPath) {
+  useEffect(() => {
+    // if (!props.isAuthenticated) {
+    //   setRedirectPath(props.authenticationPath);
+    // }
+    // if (props.isAuthenticated && !props.isAllowed) {
+    //   setRedirectPath(props.restrictedPath);
+    // }
+    // const alreadyLogged = localStorage.getItem("controlAdminIn");
+    // if (alreadyLogged && alreadyLogged === "logged In") {
+    //   setRedirectPath("");
+    // } else {
+    //   setRedirectPath(props.restrictedPath);
+    // }
+  }, []);
+
+  if (localStorage.getItem("controlAdminIn") !== "logged In") {
     const renderComponent = () => (
-      <Redirect to={{ pathname: redirectPath, state: { from: props.location } }} />
+      <Redirect
+        to={{ pathname: redirectPath, state: { from: props.location } }}
+      />
     );
     return <Route {...props} component={renderComponent} render={undefined} />;
   } else {

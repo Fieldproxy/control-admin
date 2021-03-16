@@ -8,6 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
+import NoData from "./noData";
 
 const useStyles = makeStyles({
   root: {
@@ -55,46 +56,48 @@ function CustomTable(props: PropsI) {
         className={classes.container}
         style={{ maxHeight: props.maxHeight || 400 }}
       >
-        <Table stickyHeader size="small" aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {props.columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{
-                    minWidth: column.minWidth,
-                    maxWidth: column.maxWidth,
-                  }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {props.rows
-              ? props.rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, i) => {
-                    return row ? (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={i}>
-                        {props.columns.map((column) => {
-                          const value = row[column.id];
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              {column.format && typeof value === "number"
-                                ? column.format(value)
-                                : value}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    ) : null;
-                  })
-              : ""}
-          </TableBody>
-        </Table>
+        {props.rows && props.rows.length ? (
+          <Table stickyHeader size="small" aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {props.columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{
+                      minWidth: column.minWidth,
+                      maxWidth: column.maxWidth,
+                    }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {props.rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, i) => {
+                  return row ? (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={i}>
+                      {props.columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format && typeof value === "number"
+                              ? column.format(value)
+                              : value}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ) : null;
+                })}
+            </TableBody>
+          </Table>
+        ) : (
+          <NoData data={"rows"} />
+        )}
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[25, 50, 100]}

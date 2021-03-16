@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Page1 from "./containers/page1";
 import Page2 from "./containers/page2";
@@ -11,7 +11,7 @@ import Layout from "./components/layout";
 import Login from "./containers/login";
 import { RootStoreI } from "./redux/reducers";
 import PrivateRoute from "./components/privateRoute";
-
+ 
 function Routes() {
   const isLoggedIn = useSelector((state: RootStoreI) => state.auth.isLoggedIn);
 
@@ -22,10 +22,15 @@ function Routes() {
     authenticationPath: "/login",
   };
 
+  const RedirectToDashboard = () => {
+    return <Redirect to="/dashboard" />;
+  };
+
   return (
     <Fragment>
       <BrowserRouter>
         <Switch>
+          <Route path="/" exact component={RedirectToDashboard} />
           <Route path="/login" exact component={Login} />
           <Route
             render={(props) => (

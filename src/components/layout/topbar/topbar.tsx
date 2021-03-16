@@ -5,12 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../../redux/actions/authenticate";
 import { RootStoreI } from "../../../redux/reducers";
 
+import { useHistory } from "react-router-dom";
+
 function TopBar() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector((state: RootStoreI) => state.auth.user);
 
-  const logOutFromApp = () => {
-    dispatch(logOut());
+  const logOutFromApp = async () => {
+    await dispatch(logOut());
+    history.replace("/login");
   };
 
   return (
