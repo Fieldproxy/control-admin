@@ -7,5 +7,7 @@ export const ApiUrl = {
   signOut: `${host}/signout`,
   companyData: `${base}/compData`,
   getOrganizations:`${host}/getOrganizations`,
+  organizationDetail: `${host}/getOrganization`,
   deviceDetails: `${host}/deviceDetails`
 };
+  

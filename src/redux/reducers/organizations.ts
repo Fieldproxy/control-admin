@@ -3,8 +3,11 @@ import {
   COMP_DATA_LOADING,
   COMP_DATA_SUCCESS,
   compDataI,
-  DashboardDispatchTypes,
-} from "../actions/dashboard/dashboardTypes";
+  COMP_DETAIL_FAIL,
+  COMP_DETAIL_LOADING,
+  COMP_DETAIL_SUCCESS,
+  OrganizationDispatchTypes,
+} from "../actions/organizations/organizationTypes";
 
 import { ErrorI } from "../actions/common";
 
@@ -14,11 +17,14 @@ export interface ActionI {
 }
 
 export interface dashboardI {
-  loadingCompData: Boolean;
+  loadingCompData: boolean;
   compData?: Array<compDataI>;
   error?: ErrorI;
   totalAgents: number;
   totalOrganizations: number;
+  loadingCompanyDetail: boolean;
+  compDetailError?: ErrorI;
+  compDetail: any;
 }
 
 const initialState: dashboardI = {
@@ -27,11 +33,14 @@ const initialState: dashboardI = {
   totalAgents: 0,
   totalOrganizations: 0,
   error: undefined,
+  loadingCompanyDetail: false,
+  compDetail: {},
+  compDetailError: undefined,
 };
 
 const dashboardReducer = (
   state: dashboardI = initialState,
-  action: DashboardDispatchTypes
+  action: OrganizationDispatchTypes
 ): dashboardI => {
   switch (action.type) {
     case COMP_DATA_LOADING:
@@ -47,6 +56,26 @@ const dashboardReducer = (
       };
     case COMP_DATA_FAIL:
       return { ...initialState, loadingCompData: false, error: action.payload };
+    case COMP_DETAIL_LOADING:
+      return {
+        ...state,
+        loadingCompanyDetail: true,
+        compDetailError: undefined,
+      };
+    case COMP_DETAIL_SUCCESS:
+      return {
+        ...state,
+        loadingCompanyDetail: false,
+        compDetailError: undefined,
+        compDetail: action.payload.data,
+      };
+    case COMP_DETAIL_FAIL:
+      return {
+        ...state,
+        loadingCompanyDetail: false,
+        compDetailError: action.payload,
+      };
+
     default:
       return state;
   }

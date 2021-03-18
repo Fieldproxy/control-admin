@@ -1,29 +1,61 @@
 import React, { Fragment } from "react";
 
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Redirect,
+  RouteComponentProps,
+} from "react-router-dom";
 import { useSelector } from "react-redux";
 import Page1 from "./containers/page1";
 import Page2 from "./containers/page2";
 import NotFound from "./containers/notFound";
-import Dashboard from "./containers/dashboard";
-import AgentDetail from "./containers/agentDetail";
+import Organizations from "./containers/organizations";
+import OrganizationDetail from "./containers/organizationDetail";
 import Layout from "./components/layout";
 import Login from "./containers/login";
 import { RootStoreI } from "./redux/reducers";
 import PrivateRoute from "./components/privateRoute";
- 
+import TopBar from "./components/layout/topbar";
+
+const withLayout = <P extends object>(
+  Component: React.ComponentType<P>,
+  page: string
+) => {
+  return class wrapperLayout extends React.Component<P> {
+    render() {
+      return (
+        <div className="layout-aside">
+          <TopBar page={page} />
+          <div className="content-container">
+            <Component {...(this.props as P)} />
+          </div>
+        </div>
+      );
+    }
+  };
+};
+
 function Routes() {
   const isLoggedIn = useSelector((state: RootStoreI) => state.auth.isLoggedIn);
 
   const protectedProps = {
     isAuthenticated: isLoggedIn,
     isAllowed: true,
-    restrictedPath: "/dashboard",
+    restrictedPath: "/organizations",
     authenticationPath: "/login",
   };
 
+  const OrganizationPage = withLayout(Organizations, "organization");
+
+  const OrganizationDetailPage = withLayout(
+    OrganizationDetail,
+    "organizationDetails"
+  );
+
   const RedirectToDashboard = () => {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/organizations" />;
   };
 
   return (
@@ -37,15 +69,16 @@ function Routes() {
               <Layout {...props}>
                 <Switch>
                   <PrivateRoute
-                    path="/dashboard"
+                    path="/organizations"
                     exact
-                    component={Dashboard}
+                    component={OrganizationPage}
                     {...protectedProps}
                   />
                   <PrivateRoute
-                    path="/dashboard/:companyId"
+                    path="/organizations/:companyId"
                     exact
-                    component={AgentDetail}
+                    name="organizationDetails"
+                    component={OrganizationDetailPage}
                     {...protectedProps}
                   />
                   <PrivateRoute

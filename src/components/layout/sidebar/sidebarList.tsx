@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
     nested: {
       marginLeft: theme.spacing(4),
       marginTop: "5px",
-      marginBottom: '5px',
+      marginBottom: "5px",
       width: "86%",
       padding: 0,
     },
@@ -127,27 +127,27 @@ function SidebarList() {
   const links = [
     {
       type: "main",
-      name: "Dashboard",
-      to: "/dashboard",
-      icon: <DashboardIcon />,
+      name: "Organizations",
+      to: "/organizations",
+      icon: <BusinessIcon />,
     },
     {
       type: "group",
-      name: "Organization",
-      to: "/organizations",
-      icon: <BusinessIcon />,
+      name: "Dashboard",
+      to: "/dashboard", 
+      icon: <DashboardIcon />,
       items: [
         {
           type: "sub",
           name: "Overview",
           icon: <EqualizerIcon />,
-          to: "/organizations/overview",
+          to: "/dashboard/overview",
         },
         {
           type: "sub",
           name: "Insights",
           icon: <StarBorder />,
-          to: "/organizations/insights",
+          to: "/dashboard/insights",
         },
       ],
     },

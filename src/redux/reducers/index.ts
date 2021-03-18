@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
 import authenticateReducer from "./authenticate";
-import dashboardReducer from "./dashboard";
+import organizationReducer from "./organizations";
 import agentDetailReducer from "./agentDetails";
 
 const RootReducer = combineReducers({
   auth: authenticateReducer,
-  dashboard: dashboardReducer,
+  organizations: organizationReducer,
   agentDetail: agentDetailReducer,
 });
 

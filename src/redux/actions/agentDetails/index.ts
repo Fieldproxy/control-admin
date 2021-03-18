@@ -9,7 +9,7 @@ import {
   AGENT_DETAIL_SUCCESS,
 } from "./agentDetailTypes";
 
-export const getAgentDetails = (companyId: string) => async (
+export const GetAgentDetails = (companyId: string) => async (
   dispatch: Dispatch<AgentDetailDispatchTypes>
 ) => {
   try {

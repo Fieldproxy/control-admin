@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetDashboardData } from "../../redux/actions/dashboard";
+import { GetOrganizationList } from "../../redux/actions/organizations"; 
 import { RootStoreI } from "../../redux/reducers";
 import Loader from "../../components/loader";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -8,7 +8,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import InsightCard from "./components/insightCard";
 import HeadTitle from "../../components/HeadTitle";
-import { compDataI } from "../../redux/actions/dashboard/dashboardTypes";
+import { compDataI } from "../../redux/actions/organizations/organizationTypes";
 import { NavLink } from "react-router-dom";
 import CustomTable, { columnI } from "../../components/table";
 
@@ -66,7 +66,7 @@ const columns: columnI[] = [
   },
 ];
 
-function Dashboard() {
+function Organizations() {
   const dispatch = useDispatch();
   const classes = useStyles();
   const {
@@ -75,13 +75,13 @@ function Dashboard() {
     error,
     totalAgents,
     totalOrganizations,
-  } = useSelector((state: RootStoreI) => state.dashboard);
+  } = useSelector((state: RootStoreI) => state.organizations);
 
   const [tableData, setTableData] = useState<columnTypesI[]>([]);
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    getDashboardData();
+    getOrganizationList();
   }, []);
 
   useEffect(() => {
@@ -92,8 +92,8 @@ function Dashboard() {
     }
   }, [compData, searchText]);
 
-  const getDashboardData = () => {
-    dispatch(GetDashboardData());
+  const getOrganizationList = () => {
+    dispatch(GetOrganizationList());
   };
 
   const formatForTable = (data: compDataI[], searchText?: string) => {
@@ -110,7 +110,7 @@ function Dashboard() {
         formattedData.push({
           ...d,
           action: (
-            <NavLink className="custom-link" to={`dashboard/${d.companyId}`}>
+            <NavLink className="custom-link" to={`organizations/${d.companyId}`}>
               {" "}
               View{" "}
             </NavLink>
@@ -180,4 +180,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Organizations;
