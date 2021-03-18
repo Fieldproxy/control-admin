@@ -5,7 +5,6 @@ import {
   Switch,
   Route,
   Redirect,
-  RouteComponentProps,
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Page1 from "./containers/page1";

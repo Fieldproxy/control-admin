@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { GetAgentDetails } from "../../redux/actions/agentDetails";
 import { GetOrganizationDetail } from "../../redux/actions/organizations";
-import { RootStoreI } from "../../redux/reducers";
-import Loader from "../../components/loader";
 import { RouteComponentProps } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -23,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     paper: {
-      padding: theme.spacing(1,2),
+      padding: theme.spacing(1, 2),
       textAlign: "center",
       height: 560,
       overflow: "auto",
@@ -37,10 +35,7 @@ function OrganizationDetail(props: PropsI) {
   const classes = useStyles();
   const tabs = ["General", "Agents", "Insights"];
 
-  const storeEmitter = (state: RootStoreI) => state.agentDetail;
-  const { loadingAgentDetail, userData } = useSelector(storeEmitter);
-
-  const [currentTab, setCurrentTab] = React.useState(0);
+  const [currentTab, setCurrentTab] = useState(0);
 
   const handleChangeTab = (event: React.ChangeEvent<{}>, newValue: number) => {
     setCurrentTab(newValue);

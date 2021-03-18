@@ -1,23 +1,18 @@
 import React, { ReactNode, useState } from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Collapse from "@material-ui/core/Collapse";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import DraftsIcon from "@material-ui/icons/Drafts";
-import SendIcon from "@material-ui/icons/Send";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import StarBorder from "@material-ui/icons/StarBorder";
 import { NavLink } from "react-router-dom";
-import PageviewIcon from "@material-ui/icons/Pageview";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
-import EmailIcon from "@material-ui/icons/Email";
 import BusinessIcon from "@material-ui/icons/Business";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -134,7 +129,7 @@ function SidebarList() {
     {
       type: "group",
       name: "Dashboard",
-      to: "/dashboard", 
+      to: "/dashboard",
       icon: <DashboardIcon />,
       items: [
         {
