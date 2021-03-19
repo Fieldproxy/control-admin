@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetOrganizationList } from "../../redux/actions/organizations"; 
+import { GetOrganizationList } from "../../redux/actions/organizations";
 import { RootStoreI } from "../../redux/reducers";
 import Loader from "../../components/loader";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -11,6 +11,11 @@ import HeadTitle from "../../components/HeadTitle";
 import { compDataI } from "../../redux/actions/organizations/organizationTypes";
 import { NavLink } from "react-router-dom";
 import CustomTable, { columnI } from "../../components/table";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete, {
+  AutocompleteChangeReason,
+  AutocompleteChangeDetails,
+} from "@material-ui/lab/Autocomplete";
 
 interface columnTypesI extends compDataI {
   action: JSX.Element[] | JSX.Element;
@@ -42,25 +47,41 @@ const columns: columnI[] = [
   {
     id: "companyId",
     label: "Company Id",
-    minWidth: 170,
+    minWidth: 130,
   },
   {
     id: "companyName",
     label: "Company Name",
-    minWidth: 300,
+    minWidth: 200,
+  },
+  {
+    id: "totalManagers",
+    label: "Managers",
+    minWidth: 70,
   },
   {
     id: "agents",
-    label: "Total Agents",
+    label: "Agents",
     minWidth: 70,
   },
+
   {
     id: "responses",
-    label: "Total Responses",
+    label: "Responses",
     minWidth: 70,
   },
   {
-    id: "action",
+    id: "type",
+    label: "Account Type",
+    minWidth: 100,
+  },
+  {
+    id: "createdAt",
+    label: "Onboarded At",
+    minWidth: 100,
+  },
+  {
+    id: "action", 
     label: "Actions",
     minWidth: 70,
   },
@@ -79,6 +100,7 @@ function Organizations() {
 
   const [tableData, setTableData] = useState<columnTypesI[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     getOrganizationList();
@@ -86,23 +108,24 @@ function Organizations() {
 
   useEffect(() => {
     if (compData) {
-      formatForTable(compData, searchText);
+      formatForTable(compData, searchText, status);
     } else {
-      formatForTable([], searchText);
+      formatForTable([], searchText, status);
     }
-  }, [compData, searchText]);
+  }, [compData, searchText, status]);
 
   const getOrganizationList = () => {
     dispatch(GetOrganizationList());
   };
 
-  const formatForTable = (data: compDataI[], searchText?: string) => {
+  const formatForTable = (data: compDataI[], searchText?: string, status?:string) => {
     const formattedData: columnTypesI[] = [];
-    let originalData = [];
+    let originalData = [...data];
     if (searchText) {
       originalData = data.filter((d) => d && d.companyId.includes(searchText));
-    } else {
-      originalData = data;
+    } 
+    if(status) {
+      originalData = originalData.filter(d => d && d.type === status)
     }
 
     originalData.forEach((d) => {
@@ -110,7 +133,10 @@ function Organizations() {
         formattedData.push({
           ...d,
           action: (
-            <NavLink className="custom-link" to={`organizations/${d.companyId}`}>
+            <NavLink
+              className="custom-link"
+              to={`organizations/${d.companyId}`}
+            >
               {" "}
               View{" "}
             </NavLink>
@@ -124,6 +150,17 @@ function Organizations() {
   const handleSearch = (e: React.SyntheticEvent) => {
     let target = e.target as HTMLInputElement;
     setSearchText(target.value);
+  };
+
+  const statusOptions = ["archieved", "paid", "trail"];
+
+  const handleChangeStatus = (
+    event: React.ChangeEvent<{}>,
+    value: string | null,
+    reason: AutocompleteChangeReason,
+    details?: AutocompleteChangeDetails<string> | undefined
+  ) => {
+    setStatus(value || "");
   };
 
   return (
@@ -149,15 +186,34 @@ function Organizations() {
             <Paper className={classes.paper} style={{ minHeight: "350px" }}>
               <div className="head-container">
                 <HeadTitle> Company Details </HeadTitle>
-                <div>
-                  {" "}
-                  <input
-                    type="text"
-                    value={searchText}
-                    placeholder="Search CompanyId"
-                    name="searchText"
-                    onChange={(e) => handleSearch(e)}
-                  />{" "}
+                <div className="search-bar">
+                  <div>
+                    <Autocomplete
+                      options={statusOptions}
+                      id="flat-demo"
+                      style={{ width: 150 }}
+                      value={status}
+                      onChange={handleChangeStatus}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder="Type"
+                          margin="dense"
+                        />
+                      )}
+                    />
+                  </div>
+                  <div>
+                    {" "}
+                    <input
+                      type="text"
+                      className="searchText"
+                      value={searchText}
+                      placeholder="Search CompanyId"
+                      name="searchText"
+                      onChange={(e) => handleSearch(e)}
+                    />{" "}
+                  </div>
                 </div>
               </div>
               {loadingCompData ? (

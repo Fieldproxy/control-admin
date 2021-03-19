@@ -55,7 +55,7 @@ const dashboardReducer = (
         error: undefined,
       };
     case COMP_DATA_FAIL:
-      return { ...initialState, loadingCompData: false, error: action.payload };
+      return { ...initialState, loadingCompData: false };
     case COMP_DETAIL_LOADING:
       return {
         ...state,

@@ -29,12 +29,14 @@ export type compDataI = {
   responses: number;
   start_at: string;
   agents: number;
+  createdAt: string;
+  type?: string;
 };
 
 export interface compDataSuccess {
   type: typeof COMP_DATA_SUCCESS;
   payload: {
-    compData: [compDataI];
+    compData: compDataI[];
     totalAgents: number;
     totalOrganizations: number;
   };
@@ -47,13 +49,13 @@ export interface compDetailLoading {
 export interface compDetailSuccess {
   type: typeof COMP_DETAIL_SUCCESS;
   payload: {
-    data : any
-  }
+    data: any;
+  };
 }
 
 export interface compDetailFail {
   type: typeof COMP_DETAIL_FAIL;
-  payload: ErrorI
+  payload: ErrorI;
 }
 
 export type OrganizationDispatchTypes =

@@ -11,8 +11,11 @@ import {
   OrganizationDispatchTypes,
 } from "./organizationTypes";
 
+import { ENQUEUE_SNACKBAR, notiStackTypes } from "../notistack/notiStackTypes";
 import { ApiUrl } from "../../../config/apiUrl";
 import axios from "axios";
+
+type dispatchTypesI = OrganizationDispatchTypes | notiStackTypes;
 
 const getTotalAgents = (data: compDataI[]): number => {
   let totalOrganizations = 0;
@@ -24,30 +27,56 @@ const getTotalAgents = (data: compDataI[]): number => {
   return totalOrganizations;
 };
 
+const formatOrgData = (data: compDataI[]): compDataI[] => {
+  data.forEach((d) => {
+    if (d.createdAt) {
+      d.createdAt = new Date(d.createdAt).toLocaleDateString();
+    }
+  });
+
+  return data;
+};
+
 export const GetOrganizationList = () => async (
-  dispatch: Dispatch<OrganizationDispatchTypes>
+  dispatch: Dispatch<dispatchTypesI>
 ) => {
   try {
     dispatch({ type: COMP_DATA_LOADING });
-    const res = await axios.post(ApiUrl.getOrganizations);
+    const res = await axios.get(ApiUrl.getOrganizations);
     if (res.status === 200) {
-      const { data } = res;
-      if (data) {
-        dispatch({
-          type: COMP_DATA_SUCCESS,
-          payload: {
-            compData: data,
-            totalAgents: data.length,
-            totalOrganizations: getTotalAgents(data),
-          },
-        });
+      if (res.data) {
+        const { data, status } = res.data;
+        if (status) {
+          dispatch({
+            type: COMP_DATA_SUCCESS,
+            payload: {
+              compData: formatOrgData(data.organizations),
+              totalOrganizations: data.organizations.length,
+              totalAgents: getTotalAgents(data.organizations),
+            },
+          });
+        } else {
+          throw new Error(data.error || "Unable to get data");
+        }
       } else {
-        throw new Error(data.error || "Unable to get data");
+        throw new Error("cannot get data");
       }
     } else {
       throw new Error(`Api Failed with status ${res.status}`);
     }
   } catch (err) {
+    dispatch({
+      type: ENQUEUE_SNACKBAR,
+      notification: {
+        message: err.message,
+        key: "getOrgList",
+        options: {
+          key: "getOrgList",
+          variant: "error",
+        },
+      },
+      key: "getOrgList",
+    });
     dispatch({
       type: COMP_DATA_FAIL,
       payload: { message: err.message },

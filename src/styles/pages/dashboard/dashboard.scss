@@ -8,7 +8,7 @@
 .insight-card {
   min-height: 80px;
   display: flex;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
   flex-direction: column;
 
@@ -27,10 +27,20 @@
   justify-content: space-between;
   align-items: center;
 
-  input {
+  .searchText {
     border: none;
     outline: none;
     border-bottom: 2px solid $emphasis;
     margin-right: 10px;
+  }
+}
+
+.search-bar {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  align-items: baseline;
+  div{
+    margin: 0 10px;
   }
 }
