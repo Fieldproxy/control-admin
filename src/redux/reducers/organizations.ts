@@ -3,6 +3,7 @@ import {
   COMP_DATA_LOADING,
   COMP_DATA_SUCCESS,
   compDataI,
+  companyDetailI,
   COMP_DETAIL_FAIL,
   COMP_DETAIL_LOADING,
   COMP_DETAIL_SUCCESS,
@@ -24,7 +25,7 @@ export interface dashboardI {
   totalOrganizations: number;
   loadingCompanyDetail: boolean;
   compDetailError?: ErrorI;
-  compDetail: any;
+  compDetail?: companyDetailI;
 }
 
 const initialState: dashboardI = {
@@ -34,7 +35,7 @@ const initialState: dashboardI = {
   totalOrganizations: 0,
   error: undefined,
   loadingCompanyDetail: false,
-  compDetail: {},
+  compDetail: undefined,
   compDetailError: undefined,
 };
 
@@ -74,6 +75,7 @@ const dashboardReducer = (
         ...state,
         loadingCompanyDetail: false,
         compDetailError: action.payload,
+        compDetail: undefined,
       };
 
     default:

@@ -15,7 +15,7 @@ import { ENQUEUE_SNACKBAR, notiStackTypes } from "../notistack/notiStackTypes";
 import { ApiUrl } from "../../../config/apiUrl";
 import axios from "axios";
 
-type dispatchTypesI = OrganizationDispatchTypes | notiStackTypes;
+type dispatchTypesI = OrganizationDispatchTypes | notiStackTypes | any;
 
 const getTotalAgents = (data: compDataI[]): number => {
   let totalOrganizations = 0;
@@ -89,14 +89,14 @@ export const GetOrganizationDetail = (orgId: string) => async (
 ) => {
   try {
     dispatch({ type: COMP_DETAIL_LOADING });
-    const res = await axios.post(`${ApiUrl.organizationDetail}/${orgId}`, {});
+    const res = await axios.get(`${ApiUrl.organizationDetail}/${orgId}`);
     if (res.status === 200) {
       const { data } = res;
-      if (data) {
+      if (data.status) {
         dispatch({
           type: COMP_DETAIL_SUCCESS,
           payload: {
-            data,
+            data: data.data.companyDetails,
           },
         });
       } else {
@@ -109,6 +109,53 @@ export const GetOrganizationDetail = (orgId: string) => async (
     dispatch({
       type: COMP_DETAIL_FAIL,
       payload: { message: err.message },
+    });
+  }
+};
+
+export const EditOrganizationDetail = (
+  companyId: string,
+  notionLink: string
+) => async (dispatch: Dispatch<dispatchTypesI>) => {
+  try {
+    const res = await axios.post(`${ApiUrl.updateOrganization}`, {
+      companyId,
+      notionLink,
+    });
+    if (res.status === 200) {
+      const { data } = res;
+      if (data.status) {
+        dispatch({
+          type: ENQUEUE_SNACKBAR,
+          notification: {
+            message: data.data.message,
+            key: "editOrg",
+            options: {
+              key: "editOrg",
+              variant: "success",
+            },
+          },
+          key: "editOrg",
+        });
+        dispatch(GetOrganizationDetail(companyId));
+      } else {
+        throw new Error(data.error || "Unable to update data");
+      }
+    } else {
+      throw new Error(`Api Failed with status ${res.status}`);
+    }
+  } catch (err) {
+    dispatch({
+      type: ENQUEUE_SNACKBAR,
+      notification: {
+        message: err.message,
+        key: "editOrg",
+        options: {
+          key: "editOrg",
+          variant: "error",
+        },
+      },
+      key: "editOrg",
     });
   }
 };

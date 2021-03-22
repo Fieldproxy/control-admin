@@ -81,7 +81,7 @@ const columns: columnI[] = [
     minWidth: 100,
   },
   {
-    id: "action", 
+    id: "action",
     label: "Actions",
     minWidth: 70,
   },
@@ -118,14 +118,18 @@ function Organizations() {
     dispatch(GetOrganizationList());
   };
 
-  const formatForTable = (data: compDataI[], searchText?: string, status?:string) => {
+  const formatForTable = (
+    data: compDataI[],
+    searchText?: string,
+    status?: string
+  ) => {
     const formattedData: columnTypesI[] = [];
     let originalData = [...data];
     if (searchText) {
       originalData = data.filter((d) => d && d.companyId.includes(searchText));
-    } 
-    if(status) {
-      originalData = originalData.filter(d => d && d.type === status)
+    }
+    if (status) {
+      originalData = originalData.filter((d) => d && d.type === status);
     }
 
     originalData.forEach((d) => {
@@ -185,7 +189,9 @@ function Organizations() {
           <Grid item xs={12}>
             <Paper className={classes.paper} style={{ minHeight: "350px" }}>
               <div className="head-container">
-                <HeadTitle> Company Details </HeadTitle>
+                <div style={{ width: 400 }}>
+                  <HeadTitle> Company Details </HeadTitle>
+                </div>
                 <div className="search-bar">
                   <div>
                     <Autocomplete

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { GetAgentDetails } from "../../redux/actions/agentDetails";
-import { GetOrganizationDetail } from "../../redux/actions/organizations";
+import { GetOrganizationDetail } from "../../redux/actions/organizations"; 
 import { RouteComponentProps } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";

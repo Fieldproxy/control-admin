@@ -8,6 +8,7 @@ export const ApiUrl = {
   companyData: `${base}/compData`,
   getOrganizations:`${host}/getOrganizations`,
   organizationDetail: `${host}/getOrganization`,
+  updateOrganization: `${host}/updateOrganization`,
   deviceDetails: `${host}/deviceDetails`
 };
   

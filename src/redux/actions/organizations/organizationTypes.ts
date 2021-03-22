@@ -46,10 +46,27 @@ export interface compDetailLoading {
   type: typeof COMP_DETAIL_LOADING;
 }
 
+export interface companyDetailI {
+  agents: number;
+  avatar: string;
+  companyId: string;
+  companyName: string;
+  contact: string;
+  createdAt: string;
+  firstName: string;
+  lastName: string;
+  managerList: string[];
+  responses: number;
+  role: string;
+  totalManagers: number;
+  type: string;
+  notionLink: string;
+}
+
 export interface compDetailSuccess {
   type: typeof COMP_DETAIL_SUCCESS;
   payload: {
-    data: any;
+    data: companyDetailI;
   };
 }
 
