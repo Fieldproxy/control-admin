@@ -19,23 +19,11 @@ const SideBarItems: SideBarItemI = [
     icon: <DashboardIcon />,
   },
   {
-    name: "page 1",
-    route: "/page1",
-    navKey: "page1",
+    name: "Identifierstate",
+    route: "/identifierstate",
+    navKey: "Identifierstate",
     icon: <PageviewIcon />,
-  },
-  {
-    name: "page 2",
-    route: "/page2",
-    navKey: "page2",
-    icon: <EqualizerIcon />,
-  },
-  {
-    name: "Not Found",
-    route: "/notFound",
-    navKey: "notFound",
-    icon: <EmailIcon />,
-  },
+  }
 ];
 
 export default SideBarItems;

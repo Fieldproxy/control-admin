@@ -49,17 +49,12 @@ function Routes() {
                     {...protectedProps}
                   />
                   <PrivateRoute
-                    path="/page1"
+                    path="/identifierstate"
                     exact
                     component={Page1}
                     {...protectedProps}
                   />
-                  <PrivateRoute
-                    path="/page2"
-                    exact
-                    component={Page2}
-                    {...protectedProps}
-                  />
+                 
                   <PrivateRoute component={NotFound} {...protectedProps} />
                 </Switch>
               </Layout>

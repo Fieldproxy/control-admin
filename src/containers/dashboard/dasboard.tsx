@@ -83,6 +83,7 @@ function Dashboard() {
   useEffect(() => {
     getDashboardData();
   }, []);
+  
 
   useEffect(() => {
     if (compData) {
