@@ -3,9 +3,9 @@ import "./styles/App.scss";
 import Routes from "./routes";
 import { useDispatch } from "react-redux";
 import { logInExistUser } from "./redux/actions/authenticate";
+import Notifier from "./utils/notifier";
 
 function App() {
-
   // const dispatch = useDispatch();
   // useEffect(() => {
   //   logInIfExist();
@@ -19,9 +19,9 @@ function App() {
   //   }
   // };
 
-
   return (
     <div className="App">
+      <Notifier />
       <Routes />
     </div>
   );

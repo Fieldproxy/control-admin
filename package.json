@@ -12,6 +12,7 @@
     "@types/redux-thunk": "^2.1.0",
     "axios": "^0.21.1",
     "node-sass": "^5.0.0",
+    "notistack": "^1.0.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-json-view": "^1.21.3",
@@ -39,9 +40,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build": "react-scripts build && cp build/index.html build/200.html",
+    "deploy" : "cd build/ && surge --domain http://furry-line.surge.sh/"
   },
   "eslintConfig": {
     "extends": [

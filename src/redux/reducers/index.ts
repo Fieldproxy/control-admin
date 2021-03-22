@@ -1,14 +1,17 @@
 import { combineReducers } from "redux";
 import authenticateReducer from "./authenticate";
-import dashboardReducer from "./dashboard";
+import organizationReducer from "./organizations";
 import agentDetailReducer from "./agentDetails";
 import identifierStateReducer from "./identifierstate";
+import notiStackReducer from './notistack';
+
 
 const RootReducer = combineReducers({
   auth: authenticateReducer,
-  dashboard: dashboardReducer,
+  organizations: organizationReducer,
   agentDetail: agentDetailReducer,
-  identifierData :  identifierStateReducer
+  identifierData :  identifierStateReducer,
+  notiStack: notiStackReducer
 });
 
 export type RootStoreI = ReturnType<typeof RootReducer>;

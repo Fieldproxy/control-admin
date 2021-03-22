@@ -1,22 +1,17 @@
 import React from "react";
 import SideBar from "./sidebar";
-import TopBar from "./topbar";
 import { RouteComponentProps } from "react-router-dom";
 
 export interface RouteI extends RouteComponentProps {
-  children : JSX.Element[] | JSX.Element
+  children: JSX.Element[] | JSX.Element;
+  page?:string
 }
 
-function Layout(props:RouteI ) {
+function Layout(props: RouteI) {
   return (
     <div className="layout-wrapper">
       <SideBar history={props.history} />
-      <div className="layout-aside">
-        <TopBar />
-        <div className="content-container">
-          {props.children}
-        </div>
-      </div>
+      {props.children}
     </div>
   );
 }

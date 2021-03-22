@@ -1,26 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAgentDetails } from "../../redux/actions/agentDetails";
-import { userDetailI } from "../../redux/actions/agentDetails/agentDetailTypes";
-import { RootStoreI } from "../../redux/reducers";
-import Loader from "../../components/loader";
-import { RouteComponentProps } from "react-router-dom";
-import CustomTable, { columnI } from "../../components/table";
-import HeadTitle from "../../components/HeadTitle";
+import { useSelector } from "react-redux";
+import { userDetailI } from "../../../redux/actions/agentDetails/agentDetailTypes";
+import { RootStoreI } from "../../../redux/reducers";
+import Loader from "../../../components/loader";
+import CustomTable, { columnI } from "../../../components/table";
+import HeadTitle from "../../../components/HeadTitle";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Modal from "@material-ui/core/Modal";
-import NoData from '../../components/noData';
-
-interface MatchParams {
-  companyId: string;
-}
-
-interface Props extends RouteComponentProps<MatchParams> {}
-
-interface columnTypesI extends userDetailI {
-  deviceDetails: JSX.Element[] | JSX.Element;
-}
 
 function getModalStyle() {
   const top = 50;
@@ -31,6 +17,10 @@ function getModalStyle() {
     left: `${left}%`,
     transform: `translate(-${top}%, -${left}%)`,
   };
+}
+
+interface columnTypesI extends userDetailI {
+  deviceDetails: JSX.Element[] | JSX.Element;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -69,10 +59,8 @@ const initialSelectedUserState: userDetailI = {
   deviceToken: "",
 };
 
-function AgentDetail(props: Props) {
-  const dispatch = useDispatch();
+function AgentDetails() {
   const classes = useStyles();
-
   const storeEmitter = (state: RootStoreI) => state.agentDetail;
   const { loadingAgentDetail, userData } = useSelector(storeEmitter);
   const [searchText, setSearchText] = useState("");
@@ -81,6 +69,7 @@ function AgentDetail(props: Props) {
   const [selectedUser, setSelectedUser] = useState<userDetailI>(
     initialSelectedUserState
   );
+
   const [modalStyle] = React.useState(getModalStyle);
 
   const columns: columnI[] = [
@@ -101,10 +90,6 @@ function AgentDetail(props: Props) {
       minWidth: 70,
     },
   ];
-
-  useEffect(() => {
-    dispatch(getAgentDetails(props.match.params.companyId));
-  }, []);
 
   useEffect(() => {
     if (userData) {
@@ -158,33 +143,29 @@ function AgentDetail(props: Props) {
   };
 
   return (
-    <div className="dashboard-container">
+    <div>
+      <div className="head-container">
+        <HeadTitle> Agent Details </HeadTitle>
+        <div>
+          <input
+            type="text"
+            value={searchText}
+            placeholder="Search userId"
+            name="searchText"
+            onChange={(e) => handleSearch(e)}
+          />
+        </div>
+      </div>
+
       {loadingAgentDetail ? (
         <Loader />
       ) : (
-        <div className={classes.root}>
-          <Paper className={classes.paper}>
-            <div className="head-container">
-              <HeadTitle> Company Details </HeadTitle>
-              <div>
-                <input
-                  type="text"
-                  value={searchText}
-                  placeholder="Search userId"
-                  name="searchText"
-                  onChange={(e) => handleSearch(e)}
-                />
-              </div>
-            </div>
-            <CustomTable
-              rows={userData ? tableData : []}
-              maxHeight={500}
-              columns={columns}
-            />
-          </Paper>
-        </div>
+        <CustomTable
+          rows={userData ? tableData : []}
+          maxHeight={500}
+          columns={columns}
+        />
       )}
-
       <Modal
         open={showModal}
         onClose={closeModal}
@@ -208,4 +189,4 @@ function AgentDetail(props: Props) {
   );
 }
 
-export default AgentDetail;
+export default AgentDetails;
