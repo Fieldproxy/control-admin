@@ -10,6 +10,7 @@ export const ApiUrl = {
   getPrimaryResponse:`${host}/getPrimaryResponse`,
   organizationDetail: `${host}/getOrganization`,
   updateOrganization: `${host}/updateOrganization`,
+  getLeadDetails: `${host}/getLeadDetails`,
   deviceDetails: `${host}/deviceDetails`
 };
   

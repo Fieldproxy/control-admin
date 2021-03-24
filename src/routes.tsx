@@ -14,6 +14,7 @@ import Organizations from "./containers/organizations";
 import OrganizationDetail from "./containers/organizationDetail";
 import Layout from "./components/layout";
 import Login from "./containers/login";
+import Leads from "./containers/leads";
 import { RootStoreI } from "./redux/reducers";
 import PrivateRoute from "./components/privateRoute";
 import TopBar from "./components/layout/topbar";
@@ -84,6 +85,12 @@ function Routes() {
                     path="/identifierstate"
                     exact
                     component={Page1}
+                    {...protectedProps}
+                  />
+                  <PrivateRoute
+                    path="/leads"
+                    exact
+                    component={Leads}
                     {...protectedProps}
                   />
                  
