@@ -61,6 +61,8 @@ export interface companyDetailI {
   totalManagers: number;
   type: string;
   notionLink: string;
+  enableCatalogue: boolean;
+  readyCatalogue: boolean;
 }
 
 export interface compDetailSuccess {

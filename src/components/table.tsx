@@ -32,6 +32,7 @@ type PropsI = {
   columns: columnI[];
   rows: any[];
   maxHeight?: number;
+  showPagination?: boolean;
 };
 
 function CustomTable(props: PropsI) {
@@ -99,15 +100,19 @@ function CustomTable(props: PropsI) {
           <NoData data={"rows"} />
         )}
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[25, 50, 100]}
-        component="div"
-        count={props.rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
+      {props.showPagination ? (
+        <TablePagination
+          rowsPerPageOptions={[25, 50, 100]}
+          component="div"
+          count={props.rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      ) : (
+        ""
+      )}
     </Paper>
   );
 }

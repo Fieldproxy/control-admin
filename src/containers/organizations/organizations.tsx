@@ -231,6 +231,7 @@ function Organizations() {
                 <CustomTable
                   columns={columns}
                   rows={compData ? tableData : []}
+                  showPagination={true}
                   maxHeight={360}
                 />
               )}

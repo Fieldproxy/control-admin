@@ -1,12 +1,14 @@
-import React, { useState, EventHandler } from "react";
+import React, { useState, EventHandler, Fragment } from "react";
 import { useSelector } from "react-redux";
 import { RootStoreI } from "../../../redux/reducers";
 import Loader from "../../../components/loader";
 import NoData from "../../../components/noData";
 import HeadTitle from "../../../components/HeadTitle";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import { IconButton } from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import Checkbox, { CheckboxProps } from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -32,6 +34,8 @@ function General() {
   const storeEmitter = (state: RootStoreI) => state.organizations;
   const { loadingCompanyDetail, compDetail } = useSelector(storeEmitter);
   const [showEdit, setShowEdit] = useState(false);
+  const [showCatalog, setShowCatalog] = useState(false);
+  const [showCatalogReady, setShowCatalogReady] = useState(false);
   const [notionLink, setNotionLink] = useState("");
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -41,16 +45,48 @@ function General() {
     setNotionLink(target.value);
   };
 
+  const handleChangeCatalog = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setShowCatalog(event.target.checked);
+  };
+
+  const handleChangeCatalogReady = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setShowCatalogReady(event.target.checked);
+  };
+
+  const isNotNull = (data: any) => {
+    return data !== undefined && data !== null && data !== "";
+  };
+
   const toggleEdit = () => {
     setNotionLink(
-      compDetail && compDetail.notionLink ? compDetail.notionLink : ""
+      compDetail && isNotNull(compDetail.notionLink)
+        ? compDetail.notionLink
+        : ""
+    );
+    setShowCatalog(
+      compDetail && isNotNull(compDetail.enableCatalogue)
+        ? compDetail.enableCatalogue
+        : false
+    );
+    setShowCatalogReady(
+      compDetail && isNotNull(compDetail.readyCatalogue)
+        ? compDetail.readyCatalogue
+        : false
     );
     setShowEdit(true);
   };
 
-  const saveNotionLink = () => {
+  const saveOrgDetails = () => {
     if (compDetail) {
-      dispatch(EditOrganizationDetail(compDetail.companyId, notionLink));
+      const params = {
+        notionLink: notionLink,
+        enableCatalogue: showCatalog,
+        readyCatalogue: showCatalogReady,
+      };
+
+      dispatch(EditOrganizationDetail(compDetail.companyId, params));
       cancelSave();
     }
   };
@@ -72,78 +108,99 @@ function General() {
         </div>
       ) : compDetail ? (
         <div className={classes.root}>
-          <Grid container spacing={3}>
-            <Grid item xs={6}>
-              <label> Company - {compDetail.companyName} </label>
-            </Grid>
-            <Grid item xs={6}>
-              <label> Company Id - {compDetail.companyId}</label>
-            </Grid>
-            <Grid item xs={6}>
-              <label>
-                {" "}
-                Admin - {compDetail.firstName} {compDetail.lastName}
-              </label>
-            </Grid>
+          <p> Company - {compDetail.companyName} </p>
+          <p> Company Id - {compDetail.companyId} </p>
+          <p>
+            {" "}
+            Admin - {compDetail.firstName} {compDetail.lastName}
+          </p>
+          <p> Contact - {compDetail.contact} </p>
+          <p>
+            {" "}
+            Managers -{" "}
+            {compDetail.managerList && Array.isArray(compDetail.managerList)
+              ? compDetail.managerList.join(", ")
+              : ""}{" "}
+          </p>
+          <p> Agents - {compDetail.agents} </p>
+          <p> Managers - {compDetail.totalManagers} </p>
+          <p> Responses - {compDetail.responses} </p>
+          <p> Account Type - {compDetail.type} </p>
+          <p>
+            <label>Notion Link</label>
+            {showEdit ? (
+              <input
+                type="text"
+                value={notionLink}
+                name="notionLink"
+                style={{ marginLeft: "16px" }}
+                onChange={handleChange}
+                placeholder="Enter Notion link"
+                className={classes.input}
+              />
+            ) : (
+              <label> {compDetail.notionLink} </label>
+            )}{" "}
+          </p>
+          <p>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={showEdit ? showCatalog : compDetail.enableCatalogue}
+                  onChange={handleChangeCatalog}
+                  name="checkedB"
+                  color="primary"
+                  disabled={!showEdit}
+                />
+              }
+              label="Enable Product Catalog"
+            />
+          </p>
+          <p>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={
+                    showEdit ? showCatalogReady : compDetail.readyCatalogue
+                  }
+                  onChange={handleChangeCatalogReady}
+                  name="checkedB"
+                  color="primary"
+                  disabled={!showEdit}
+                />
+              }
+              label="Is Catalog Ready"
+            />
+          </p>
 
-            <Grid item xs={6}>
-              <label> Contact - {compDetail.contact} </label>
-            </Grid>
-
-            <Grid item xs={12}>
-              <label>
-                {" "}
-                Managers -{" "}
-                {compDetail.managerList && Array.isArray(compDetail.managerList)
-                  ? compDetail.managerList.join(", ")
-                  : ""}{" "}
-              </label>
-            </Grid>
-            <Grid item xs={3}>
-              <label> Agents - {compDetail.agents} </label>
-            </Grid>
-            <Grid item xs={3}>
-              <label> Managers - {compDetail.totalManagers} </label>
-            </Grid>
-            <Grid item xs={3}>
-              <label> Responses - {compDetail.responses} </label>
-            </Grid>
-            <Grid item xs={3}>
-              <label> Account Type - {compDetail.type} </label>
-            </Grid>
-            <Grid item xs={12}>
-              <label>Notion Link</label>
-              {showEdit ? (
-                <div>
-                  <input
-                    type="text"
-                    value={notionLink}
-                    name="notionLink"
-                    onChange={handleChange}
-                    placeholder="Enter Notion link"
-                    className={classes.input}
-                  />
-                  <IconButton onClick={saveNotionLink}>
-                    {" "}
-                    <SaveIcon />{" "}
-                  </IconButton>
-                  <IconButton onClick={cancelSave}>
-                    {" "}
-                    <CancelIcon />{" "}
-                  </IconButton>
-                </div>
-              ) : (
-                <div>
+          <hr />
+          <div>
+            {showEdit ? (
+              <Fragment>
+                <Button
+                  color="secondary"
+                  startIcon={<CancelIcon />}
+                  onClick={cancelSave}
+                >
+                  cancel
+                </Button>
+                <Button
+                  style={{ marginLeft: "16px" }}
+                  color="primary"
+                  startIcon={<SaveIcon />}
+                  onClick={saveOrgDetails}
+                >
                   {" "}
-                  {compDetail.notionLink}{" "}
-                  <IconButton onClick={toggleEdit}>
-                    {" "}
-                    <EditIcon />{" "}
-                  </IconButton>{" "}
-                </div>
-              )}
-            </Grid>
-          </Grid>
+                  Save{" "}
+                </Button>
+              </Fragment>
+            ) : (
+              <Button startIcon={<EditIcon />} onClick={toggleEdit}>
+                {" "}
+                Edit{" "}
+              </Button>
+            )}
+          </div>
         </div>
       ) : (
         <NoData data="Company Details" />
