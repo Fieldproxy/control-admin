@@ -10,7 +10,7 @@ import {
   OrganizationDispatchTypes,
 } from "../actions/organizations/organizationTypes";
 
-import { ErrorI } from "../actions/common";
+import {ErrorI} from "../actions/common";
 
 export interface ActionI {
   type: String;
@@ -45,7 +45,7 @@ const dashboardReducer = (
 ): dashboardI => {
   switch (action.type) {
     case COMP_DATA_LOADING:
-      return { ...state, loadingCompData: true, error: undefined };
+      return {...state, loadingCompData: true, error: undefined};
     case COMP_DATA_SUCCESS:
       return {
         ...state,
@@ -56,7 +56,7 @@ const dashboardReducer = (
         error: undefined,
       };
     case COMP_DATA_FAIL:
-      return { ...initialState, loadingCompData: false };
+      return {...initialState, loadingCompData: false};
     case COMP_DETAIL_LOADING:
       return {
         ...state,

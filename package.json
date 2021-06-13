@@ -38,11 +38,11 @@
     "redux-devtools-extension": "^2.13.8"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "SET PORT=3001 && react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build": "react-scripts build && cp build/index.html build/200.html",
-    "deploy": "cd build/ && surge --domain http://furry-line-vishal.surge.sh/"
+    "deploy": "cd build/ && surge --domain http://furry-line.surge.sh/"
   },
   "eslintConfig": {
     "extends": [

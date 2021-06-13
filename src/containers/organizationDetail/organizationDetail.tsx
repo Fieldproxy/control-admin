@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { GetAgentDetails } from "../../redux/actions/agentDetails";
-import { GetOrganizationDetail } from "../../redux/actions/organizations"; 
-import { RouteComponentProps } from "react-router-dom";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import React, {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {GetAgentDetails} from "../../redux/actions/agentDetails";
+import {GetOrganizationDetail, GetWorkflowDetails} from "../../redux/actions/organizations";
+import {RouteComponentProps} from "react-router-dom";
+import {makeStyles, createStyles, Theme} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CustomTabs from "../../components/customTabs";
 import AgentDetails from "./tabs/agentDetails";
 import General from "./tabs/general";
+
+import DeleteResponses from "./tabs/deleteResponses";
 
 interface MatchParams {
   companyId: string;
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function OrganizationDetail(props: PropsI) {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const tabs = ["General", "Agents", "Insights"];
+  const tabs = ["General", "Agents", "Delete Responses"];
 
   const [currentTab, setCurrentTab] = useState(0);
 
@@ -44,7 +46,8 @@ function OrganizationDetail(props: PropsI) {
   useEffect(() => {
     dispatch(GetAgentDetails(props.match.params.companyId));
     dispatch(GetOrganizationDetail(props.match.params.companyId));
-  }, []);
+    dispatch(GetWorkflowDetails(props.match.params.companyId));
+  }, [dispatch, props.match.params.companyId]);
 
   const renderTabData = (tabIdx: number) => {
     switch (tabIdx) {
@@ -52,6 +55,8 @@ function OrganizationDetail(props: PropsI) {
         return <General />;
       case 1:
         return <AgentDetails />;
+      case 2:
+        return <DeleteResponses companyId={props.match.params.companyId} />;
       default:
         return <div> Tab Data </div>;
     }
@@ -59,11 +64,7 @@ function OrganizationDetail(props: PropsI) {
 
   return (
     <div className="dashboard-container">
-      <CustomTabs
-        handleChange={handleChangeTab}
-        currentTab={currentTab}
-        tabs={tabs}
-      />
+      <CustomTabs handleChange={handleChangeTab} currentTab={currentTab} tabs={tabs} />
       <div className={classes.root}>
         <Paper className={classes.paper}>{renderTabData(currentTab)}</Paper>
       </div>
