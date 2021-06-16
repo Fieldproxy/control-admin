@@ -127,7 +127,7 @@ function SidebarList() {
       icon: <BusinessIcon />,
     },
     {
-      type: "group",
+      type: "main",
       name: "leads",
       to: "/leads",
       icon: <DashboardIcon />,

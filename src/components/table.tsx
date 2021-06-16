@@ -8,6 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
+import Checkbox from '@material-ui/core/Checkbox';
 import NoData from "./noData";
 
 const useStyles = makeStyles({
@@ -31,8 +32,13 @@ export interface columnI {
 type PropsI = {
   columns: columnI[];
   rows: any[];
+  selected?: any[];
+  selectKey?: string;
+  selectAll? : Function;
+  handleClick?: Function;
   maxHeight?: number;
   showPagination?: boolean;
+  
 };
 
 function CustomTable(props: PropsI) {
@@ -51,6 +57,12 @@ function CustomTable(props: PropsI) {
     setPage(0);
   };
 
+  const isSelected = (name: string) => props && props.selected ? props.selected.indexOf(name) !== -1 : false;
+
+  if(!props.selectKey){
+    props.selectKey = props.columns[0] ? props.columns[0].id : "id"
+  }
+
   return (
     <Paper className={classes.root}>
       <TableContainer
@@ -61,6 +73,14 @@ function CustomTable(props: PropsI) {
           <Table stickyHeader size="small" aria-label="sticky table">
             <TableHead>
               <TableRow>
+             {props.selected &&  <TableCell padding="checkbox">
+                <Checkbox
+                 indeterminate={props.selected.length > 0 && props.selected.length < props.rows.filter(item => !!item && props.selectKey && !!item[props.selectKey]).length}
+                 checked={props.selected.length > 0 && props.selected.length === props.rows.filter(item => !!item && props.selectKey && !!item[props.selectKey]).length}
+                 onChange={(e) => props.selectAll ? props.selectAll(): {}}
+                  inputProps={{ 'aria-label': 'select all desserts' }}
+                />
+              </TableCell>}
                 {props.columns.map((column) => (
                   <TableCell
                     key={column.id}
@@ -79,8 +99,26 @@ function CustomTable(props: PropsI) {
               {props.rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, i) => {
+                  const isItemSelected = props.selectKey ? isSelected(row[props.selectKey]) : false;
                   return row ? (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={i}>
+                    <TableRow 
+                    hover 
+                    onClick={(event) => props.handleClick && props.selectKey ? props.handleClick( row[props.selectKey]) : {}}
+                    role="checkbox"
+                     aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={ props.selectKey ? `${row[ props.selectKey]}-${i}` : `${i}`}
+                    selected={isItemSelected}
+                    >
+                   { props.selected &&  
+                    
+                       <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isItemSelected}
+                          inputProps={{ 'aria-labelledby': `${i}` }}
+                        />
+                      </TableCell>
+                    }
                       {props.columns.map((column) => {
                         const value = row[column.id];
                         return (

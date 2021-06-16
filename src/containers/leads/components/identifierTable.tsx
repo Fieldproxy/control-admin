@@ -1,89 +1,153 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+
 import {leadObject} from '../../../redux/actions/leads/identifierStateType'
-import Box from '@material-ui/core/Box';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import ReactJson from 'react-json-view'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
-const useRowStyles = makeStyles({
-  root: {
-    '& > *': {
-      borderBottom: 'unset',
-    },
-  },
-});
+import CustomTable,{ columnI } from '../../../components/table';
+import Menu from '../../../components/menu';
+import { useState } from 'react';
+import { modifyIdentifierData } from '../../../redux/actions/leads';
+import { useDispatch } from 'react-redux';
 
 
-interface rowsI{
-  row : leadObject,
-  key : string
-}
-function Row(props : rowsI) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
-  const classes = useRowStyles();
+const columns: columnI[] = [
   
-  return (
-    <React.Fragment>
-      <TableRow className={classes.root}>
-        
-        <TableCell component="th" scope="row">
-          {row['cf-company']}
-        </TableCell>
-        <TableCell align="right">{row['cf-email']}</TableCell>
-        <TableCell align="right">{row['cf-name']}</TableCell>
-        <TableCell align="right">{row['time']}</TableCell>
-        <TableCell align="right">{row['cf-revenue']}</TableCell>
-        <TableCell align="right">{row['cf-url']}</TableCell>
-        <TableCell align="right">{row['utm_campaign']}</TableCell>
-        <TableCell align="right">{row['utm_medium']}</TableCell>
-        <TableCell align="right">{row['utm_source']}</TableCell>
-      </TableRow>
-      
-    </React.Fragment>
-  );
-}
+  {
+    id: "status",
+    minWidth: 130,
+    label: "status"
+  },
+  {
+    id: "cf-email",
+    label: "Email",
+    minWidth: 130,
+  },
+  {
+    id: "cf-name",
+    label: "Name",
+    minWidth: 200,
+  },
+  {
+    id: "time",
+    label: "Submitted time",
+    minWidth: 70,
+  },
+  {
+    id: "cf-revenue",
+    label: "agents",
+    minWidth: 70,
+  },
 
+  {
+    id: "cf-url",
+    label: "phone",
+    minWidth: 70,
+  },
+  {
+    id: "utm_campaign",
+    label: "campaign",
+    minWidth: 100,
+  },
+  {
+    id: "utm_medium",
+    label: "medium",
+    minWidth: 100,
+  },
+  {
+    id: "utm_source",
+    label: "source",
+    minWidth: 70,
+  }
+];
 
 interface CollapsibleTableI {
   identifiers? : Array<leadObject>
 }
 export default function CollapsibleTable(props: CollapsibleTableI) {
+  const dispatch = useDispatch();
+  let [selected,handleSelected] = useState<string[]>([]);
+
+  const selectAll = () => {
+    if(selected && selected.length){
+      handleSelected([])
+      return
+    }
+
+    if(props.identifiers){
+        let selectedEmails = props.identifiers.map(item => item["cf-url"]).filter(item => !!item)
+console.log(selectedEmails)
+        handleSelected(selectedEmails)
+    }
+
+  }
+
+  const handleClick = (key:string) => {
+    if(!key){
+      
+      return
+    }
+
+    if(key){
+        let hasValue = selected ? selected.indexOf(key) !== -1 : false;
+        if(hasValue){
+          handleSelected(selected.filter(item => item !== key))
+        }
+        else {
+
+          let selectedI = [...selected,key]
+          handleSelected(selectedI)
+        }
+        
+    }
+
+  }
+  
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            
-            <TableCell>Compnay Name</TableCell>
-            <TableCell align="right">Email</TableCell>
-            <TableCell align="right">Name</TableCell>
-            <TableCell align="right">time</TableCell>
-            <TableCell align="right">agents</TableCell>
-            <TableCell align="right">Phone</TableCell>
-            <TableCell align="right">utm_campaign</TableCell>
-            <TableCell align="right">utm_medium</TableCell>
-            <TableCell align="right">utm_source</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {props.identifiers && props.identifiers.map((row:leadObject) => (
-            <Row key={row.entry} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <CustomTable
+    columns={columns}
+    selected={selected}
+    selectKey={"cf-url"}
+    selectAll={selectAll}
+    handleClick={handleClick}
+    rows={props.identifiers ? props.identifiers.reverse().map((item) => ({
+      ...item,
+      status : (
+        <Menu status={item["cf-status"] ? item["cf-status"] : "Fill Status"} menu={['converted','trail','stage1','stage2','beta','later','invalid',"Moved to freshworks"]} handleUpdate={(value:string) => {
+          console.log(value)
+          props.identifiers?.forEach((mat,index) => {
+            if(mat["cf-url"] === item["cf-url"]){
+              dispatch(modifyIdentifierData({...mat,"cf-status": value},index))
+            }
+          })
+        }}/>
+      )
+    })) : []}
+    showPagination={true}
+    maxHeight={560}
+  />
+   
   );
 }
+
+// <TableContainer component={Paper}>
+// <Table aria-label="collapsible table">
+//   <TableHead>
+//     <TableRow>
+      
+//       <TableCell>Compnay Name</TableCell>
+//       <TableCell align="right">Email</TableCell>
+//       <TableCell align="right">Name</TableCell>
+//       <TableCell align="right">time</TableCell>
+//       <TableCell align="right">agents</TableCell>
+//       <TableCell align="right">Phone</TableCell>
+//       <TableCell align="right">utm_campaign</TableCell>
+//       <TableCell align="right">utm_medium</TableCell>
+//       <TableCell align="right">utm_source</TableCell>
+//     </TableRow>
+//   </TableHead>
+//   <TableBody>
+//     {props.identifiers && props.identifiers.map((row:leadObject) => (
+//       <Row key={row.entry} row={row} />
+//     ))}
+//   </TableBody>
+// </Table>
+// </TableContainer>

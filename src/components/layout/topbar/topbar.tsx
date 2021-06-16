@@ -23,6 +23,12 @@ const getBreadCrumbs = (page: string) => {
         pageName: "Organization Details",
         backTo: "/organizations",
       };
+
+      case "Leads":
+        return {
+          pageName: "Leads",
+          backTo: "/",
+        };
     default:
       return {
         pageName: "Control Panel",

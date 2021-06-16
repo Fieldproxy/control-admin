@@ -4,6 +4,7 @@ import {
   LEAD_DATA_SUCCESS,
   leadObject,
   LeadDispatchTypes,
+  LEAD_DATA_UPDATE,
 } from "../actions/leads/identifierStateType";
 
 import {ErrorI} from "../actions/common";
@@ -42,6 +43,18 @@ const identifierStateReducer = (
 
         error: undefined,
       };
+
+      case LEAD_DATA_UPDATE:
+       let leads:leadObject[] = state.leads ? state.leads : [];
+       leads[action.payload.index] = action.payload.data
+        return {
+          ...state,
+          loadingIdentifierState: false,
+          leads: leads,
+       
+  
+          error: undefined,
+        };  
     case LEAD_DATA_FAIL:
       return {...initialState, loadingIdentifierState: false, error: action.payload};
     default:

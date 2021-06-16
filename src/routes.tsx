@@ -54,6 +54,11 @@ function Routes() {
     "organizationDetails"
   );
 
+  const LeadsPage = withLayout(
+    Leads,
+    "Leads"
+  );
+
   const RedirectToDashboard = () => {
     return <Redirect to="/organizations" />;
   };
@@ -90,7 +95,7 @@ function Routes() {
                   <PrivateRoute
                     path="/leads"
                     exact
-                    component={Leads}
+                    component={LeadsPage}
                     {...protectedProps}
                   />
                  

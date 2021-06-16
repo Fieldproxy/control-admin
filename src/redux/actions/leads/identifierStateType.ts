@@ -3,6 +3,7 @@ import { ErrorI } from "../common";
 export const LEAD_DATA_LOADING = "LEAD_DATA_LOADING";
 export const LEAD_DATA_SUCCESS = "LEAD_DATA_SUCCESS";
 export const LEAD_DATA_FAIL = "LEAD_DATA_FAIL";
+export const LEAD_DATA_UPDATE = "LEAD_DATA_UPDATE";
 
 export interface identifierDataLoading {
   type: typeof LEAD_DATA_LOADING;
@@ -24,10 +25,13 @@ export type leadObject = {
   "utm_campaign": string,
   "utm_medium": string,
   "utm_source": string,
-  "time": string
+  
+  "time": string,
+  "cf-status"?: string,
 };
 
 export interface identifierDataSuccess {
+  
   type: typeof LEAD_DATA_SUCCESS;
   payload: {
     matches?: Array<leadObject>,
@@ -35,7 +39,16 @@ export interface identifierDataSuccess {
   };
 }
 
+export interface identifierDataUpdate {
+  type: typeof LEAD_DATA_UPDATE;
+  payload: {
+    data: leadObject,
+    index: number,
+  };
+}
+
 export type LeadDispatchTypes =
   | identifierDataFail
   | identifierDataLoading
-  | identifierDataSuccess;
+  | identifierDataSuccess
+  | identifierDataUpdate;
