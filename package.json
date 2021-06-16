@@ -42,7 +42,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build": "react-scripts build && cp build/index.html build/200.html",
-    "deploy": "cd build/ && surge --domain http://furry-line.surge.sh/"
+    "deploy": "cd build/ && surge --domain http://furry-line.surge.sh/",
+    "deploy2": "cd build/ && surge --domain http://admin-v2.surge.sh/"
   },
   "eslintConfig": {
     "extends": [

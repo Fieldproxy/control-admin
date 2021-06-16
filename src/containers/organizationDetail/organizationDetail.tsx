@@ -7,7 +7,9 @@ import {makeStyles, createStyles, Theme} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CustomTabs from "../../components/customTabs";
 import AgentDetails from "./tabs/agentDetails";
+import ManagerDetails from "./tabs/managerdetail";
 import General from "./tabs/general";
+import { GetManagerDetails } from "../../redux/actions/managerdetails";
 
 import DeleteResponses from "./tabs/deleteResponses";
 
@@ -35,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function OrganizationDetail(props: PropsI) {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const tabs = ["General", "Agents", "Delete Responses"];
+  const tabs = ["General", "Agents", "Delete Responses","Managers"];
 
   const [currentTab, setCurrentTab] = useState(0);
 
@@ -45,6 +47,7 @@ function OrganizationDetail(props: PropsI) {
 
   useEffect(() => {
     dispatch(GetAgentDetails(props.match.params.companyId));
+    dispatch(GetManagerDetails(props.match.params.companyId));
     dispatch(GetOrganizationDetail(props.match.params.companyId));
     dispatch(GetWorkflowDetails(props.match.params.companyId));
   }, [dispatch, props.match.params.companyId]);
@@ -57,6 +60,8 @@ function OrganizationDetail(props: PropsI) {
         return <AgentDetails />;
       case 2:
         return <DeleteResponses companyId={props.match.params.companyId} />;
+      case 3:
+        return <ManagerDetails />;
       default:
         return <div> Tab Data </div>;
     }

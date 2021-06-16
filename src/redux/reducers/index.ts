@@ -4,14 +4,19 @@ import organizationReducer from "./organizations";
 import agentDetailReducer from "./agentDetails";
 import identifierStateReducer from "./identifierstate";
 import leadsReducer from "./leads";
-import notiStackReducer from "./notistack";
+
 import workflowAndTaskListReducer from "./workflowsAndTaskList";
+import notiStackReducer from './notistack';
+import managerDetailReducer from "./managerdetails";
+
 
 const RootReducer = combineReducers({
   auth: authenticateReducer,
   organizations: organizationReducer,
   agentDetail: agentDetailReducer,
   identifierData: identifierStateReducer,
+  managerdetail : managerDetailReducer,
+  
   notiStack: notiStackReducer,
   leads: leadsReducer,
   workflowsAndTaskList: workflowAndTaskListReducer,

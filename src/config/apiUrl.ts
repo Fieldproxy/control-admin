@@ -19,4 +19,5 @@ export const ApiUrl = {
   secureDeleteResponses: `${host}/secureDeleteResponses`,
   getCatalogCount: `${host}/getCatalogCount`,
   deleteAllCatalogueData: `${host}/deleteAllCatalogueData`,
+  managerDetails: `${host}/getManagerDetails`
 };

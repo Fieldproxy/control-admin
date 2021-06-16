@@ -128,26 +128,27 @@ function SidebarList() {
     },
     {
       type: "group",
-      name: "Dashboard",
-      to: "/dashboard",
+      name: "leads",
+      to: "/leads",
       icon: <DashboardIcon />,
-      items: [
-        {
-          type: "sub",
-          name: "Overview",
-          icon: <EqualizerIcon />,
-          to: "/dashboard/overview",
-        },
-        {
-          type: "sub",
-          name: "Insights",
-          icon: <StarBorder />,
-          to: "/dashboard/insights",
-        },
-      ],
+     
     },
   ];
 
+  // items: [
+  //   {
+  //     type: "sub",
+  //     name: "Overview",
+  //     icon: <EqualizerIcon />,
+  //     to: "/dashboard/overview",
+  //   },
+  //   {
+  //     type: "sub",
+  //     name: "Insights",
+  //     icon: <StarBorder />,
+  //     to: "/dashboard/insights",
+  //   },
+  // ],
   return (
     <List
       component="nav"

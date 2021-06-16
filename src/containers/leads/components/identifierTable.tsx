@@ -44,6 +44,7 @@ function Row(props : rowsI) {
         </TableCell>
         <TableCell align="right">{row['cf-email']}</TableCell>
         <TableCell align="right">{row['cf-name']}</TableCell>
+        <TableCell align="right">{row['time']}</TableCell>
         <TableCell align="right">{row['cf-revenue']}</TableCell>
         <TableCell align="right">{row['cf-url']}</TableCell>
         <TableCell align="right">{row['utm_campaign']}</TableCell>
@@ -70,6 +71,7 @@ export default function CollapsibleTable(props: CollapsibleTableI) {
             <TableCell align="right">Email</TableCell>
             <TableCell align="right">Name</TableCell>
             <TableCell align="right">time</TableCell>
+            <TableCell align="right">agents</TableCell>
             <TableCell align="right">Phone</TableCell>
             <TableCell align="right">utm_campaign</TableCell>
             <TableCell align="right">utm_medium</TableCell>
