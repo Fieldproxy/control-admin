@@ -7,7 +7,9 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import CustomTabs from "../../components/customTabs";
 import AgentDetails from "./tabs/agentDetails";
+import ManagerDetails from "./tabs/managerdetail";
 import General from "./tabs/general";
+import { GetManagerDetails } from "../../redux/actions/managerdetails";
 
 interface MatchParams {
   companyId: string;
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function OrganizationDetail(props: PropsI) {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const tabs = ["General", "Agents", "Insights"];
+  const tabs = ["General", "Agents", "Managers"];
 
   const [currentTab, setCurrentTab] = useState(0);
 
@@ -43,6 +45,7 @@ function OrganizationDetail(props: PropsI) {
 
   useEffect(() => {
     dispatch(GetAgentDetails(props.match.params.companyId));
+    dispatch(GetManagerDetails(props.match.params.companyId));
     dispatch(GetOrganizationDetail(props.match.params.companyId));
   }, []);
 
@@ -52,6 +55,8 @@ function OrganizationDetail(props: PropsI) {
         return <General />;
       case 1:
         return <AgentDetails />;
+      case 2:
+        return <ManagerDetails />;
       default:
         return <div> Tab Data </div>;
     }

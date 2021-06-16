@@ -11,6 +11,7 @@ export const ApiUrl = {
   organizationDetail: `${host}/getOrganization`,
   updateOrganization: `${host}/updateOrganization`,
   getLeadDetails: `${host}/getLeadDetails`,
-  deviceDetails: `${host}/deviceDetails`
+  deviceDetails: `${host}/deviceDetails`,
+  managerDetails: `${host}/getManagerDetails`
 };
   
