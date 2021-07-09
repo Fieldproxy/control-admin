@@ -121,6 +121,7 @@ export const EditOrganizationDetail =
       notionLink: string;
       enableCatalogue: boolean;
       readyCatalogue: boolean;
+      mobileNumberValidation: boolean;
     }
   ) =>
   async (dispatch: Dispatch<dispatchTypesI>) => {

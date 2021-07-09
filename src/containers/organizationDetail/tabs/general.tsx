@@ -1,19 +1,19 @@
-import React, { useState, EventHandler, Fragment } from "react";
-import { useSelector } from "react-redux";
-import { RootStoreI } from "../../../redux/reducers";
+import React, {useState, Fragment} from "react";
+import {useSelector} from "react-redux";
+import {RootStoreI} from "../../../redux/reducers";
 import Loader from "../../../components/loader";
 import NoData from "../../../components/noData";
 import HeadTitle from "../../../components/HeadTitle";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
-import Checkbox, { CheckboxProps } from "@material-ui/core/Checkbox";
+import {makeStyles, createStyles, Theme} from "@material-ui/core/styles";
+import {Button} from "@material-ui/core";
+import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
-import { useDispatch } from "react-redux";
-import { EditOrganizationDetail } from "../../../redux/actions/organizations";
+import {useDispatch} from "react-redux";
+import {EditOrganizationDetail} from "../../../redux/actions/organizations";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,10 +32,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function General() {
   const storeEmitter = (state: RootStoreI) => state.organizations;
-  const { loadingCompanyDetail, compDetail } = useSelector(storeEmitter);
+  const {loadingCompanyDetail, compDetail} = useSelector(storeEmitter);
   const [showEdit, setShowEdit] = useState(false);
   const [showCatalog, setShowCatalog] = useState(false);
   const [showCatalogReady, setShowCatalogReady] = useState(false);
+  const [mobileNumberValidation, setMobileNumberValidation] = useState(false);
   const [notionLink, setNotionLink] = useState("");
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -49,10 +50,12 @@ function General() {
     setShowCatalog(event.target.checked);
   };
 
-  const handleChangeCatalogReady = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChangeCatalogReady = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowCatalogReady(event.target.checked);
+  };
+
+  const handleChangeMobileNumberValidation = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMobileNumberValidation(event.target.checked);
   };
 
   const isNotNull = (data: any) => {
@@ -60,19 +63,16 @@ function General() {
   };
 
   const toggleEdit = () => {
-    setNotionLink(
-      compDetail && isNotNull(compDetail.notionLink)
-        ? compDetail.notionLink
-        : ""
-    );
+    setNotionLink(compDetail && isNotNull(compDetail.notionLink) ? compDetail.notionLink : "");
     setShowCatalog(
-      compDetail && isNotNull(compDetail.enableCatalogue)
-        ? compDetail.enableCatalogue
-        : false
+      compDetail && isNotNull(compDetail.enableCatalogue) ? compDetail.enableCatalogue : false
     );
     setShowCatalogReady(
-      compDetail && isNotNull(compDetail.readyCatalogue)
-        ? compDetail.readyCatalogue
+      compDetail && isNotNull(compDetail.readyCatalogue) ? compDetail.readyCatalogue : false
+    );
+    setMobileNumberValidation(
+      compDetail && isNotNull(compDetail.mobileNumberValidation)
+        ? compDetail.mobileNumberValidation
         : false
     );
     setShowEdit(true);
@@ -81,6 +81,7 @@ function General() {
   const saveOrgDetails = () => {
     if (compDetail) {
       const params = {
+        mobileNumberValidation,
         notionLink: notionLink,
         enableCatalogue: showCatalog,
         readyCatalogue: showCatalogReady,
@@ -102,7 +103,7 @@ function General() {
         <HeadTitle> Company Details </HeadTitle>
       </div>
       {loadingCompanyDetail ? (
-        <div style={{ height: 400 }}>
+        <div style={{height: 400}}>
           {" "}
           <Loader />{" "}
         </div>
@@ -133,7 +134,7 @@ function General() {
                 type="text"
                 value={notionLink}
                 name="notionLink"
-                style={{ marginLeft: "16px" }}
+                style={{marginLeft: "16px"}}
                 onChange={handleChange}
                 placeholder="Enter Notion link"
                 className={classes.input}
@@ -160,9 +161,7 @@ function General() {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={
-                    showEdit ? showCatalogReady : compDetail.readyCatalogue
-                  }
+                  checked={showEdit ? showCatalogReady : compDetail.readyCatalogue}
                   onChange={handleChangeCatalogReady}
                   name="checkedB"
                   color="primary"
@@ -172,24 +171,32 @@ function General() {
               label="Is Catalog Ready"
             />
           </p>
-
+          <p>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={showEdit ? mobileNumberValidation : compDetail.mobileNumberValidation}
+                  onChange={handleChangeMobileNumberValidation}
+                  name="checkedB"
+                  color="primary"
+                  disabled={!showEdit}
+                />
+              }
+              label="Enable Mobile Number Validation"
+            />
+          </p>
           <hr />
           <div>
             {showEdit ? (
               <Fragment>
-                <Button
-                  color="secondary"
-                  startIcon={<CancelIcon />}
-                  onClick={cancelSave}
-                >
+                <Button color="secondary" startIcon={<CancelIcon />} onClick={cancelSave}>
                   cancel
                 </Button>
                 <Button
-                  style={{ marginLeft: "16px" }}
+                  style={{marginLeft: "16px"}}
                   color="primary"
                   startIcon={<SaveIcon />}
-                  onClick={saveOrgDetails}
-                >
+                  onClick={saveOrgDetails}>
                   {" "}
                   Save{" "}
                 </Button>

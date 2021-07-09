@@ -67,6 +67,7 @@ export interface companyDetailI {
   notionLink: string;
   enableCatalogue: boolean;
   readyCatalogue: boolean;
+  mobileNumberValidation: boolean;
 }
 
 export interface compDetailSuccess {
